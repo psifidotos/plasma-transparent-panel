@@ -421,6 +421,13 @@ class MainWindow(QtGui.QWidget):
                 command = command + " " +shad
             os.system(str(command))
             self.updateThemeCmb(newtheme)
+            msg2 = QtGui.QMessageBox()
+            msg2.setIcon(QtGui.QMessageBox.Information)
+            msg2.setText("Your new theme was created and you can activate it through Plasma System Settings")
+            msg2.setWindowTitle("New Theme Created")
+            msg2.setStandardButtons(QtGui.QMessageBox.Ok)
+            retval2 = msg2.exec_()
+            
             
         
     def updateThemeCmb(self, newTheme):        
