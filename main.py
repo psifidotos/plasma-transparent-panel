@@ -205,6 +205,8 @@ class MainWindow(QtGui.QWidget):
         self.deleteb.clicked.connect(self.deleteThemeBtnClicked)
         self.updateThemeCmb("")
                 
+        icon = QtGui.QIcon.fromTheme("preferences-desktop-color")        
+        self.setWindowIcon(icon)
         self.setWindowTitle('Transparent Panel')
         self.show()
            
@@ -404,9 +406,9 @@ class MainWindow(QtGui.QWidget):
                   
     def askThemeCreation(self):
         msg = QtGui.QMessageBox()
-        msg.setIcon(QtGui.QMessageBox.Question)
+        msg.setIcon(QtGui.QMessageBox.Warning)
 
-        newtheme=self.themeCmb.currentText()+" - "+self.panel+" Transparent"
+        newtheme=self.themeCmb.currentText()+' - '+self.panel+' Transparent'
         msg.setText("Would you like to create theme <b>"+newtheme+"</b> ?")
         msg.setWindowTitle("Create Theme Confirmation")
         msg.setStandardButtons(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
@@ -414,7 +416,7 @@ class MainWindow(QtGui.QWidget):
         retval = msg.exec_()
         
         if retval == QtGui.QMessageBox.Yes:
-            command = "python transparentpanel.py "+self.themeCmb.currentText()+" "+self.panel
+            command = 'python transparentpanel.py "'+self.themeCmb.currentText()+'" '+self.panel
             for shad in self.shadows:
                 command = command + " " +shad
             os.system(str(command))
@@ -443,7 +445,7 @@ class MainWindow(QtGui.QWidget):
 
     def deleteThemeBtnClicked(self, pressed):
         msg = QtGui.QMessageBox()
-        msg.setIcon(QtGui.QMessageBox.Question)
+        msg.setIcon(QtGui.QMessageBox.Warning)
 
         msg.setText("Would you like to delete theme <b>"+self.themeCmb.currentText()+"</b> ?")
         msg.setWindowTitle("Delete Theme Confirmation")

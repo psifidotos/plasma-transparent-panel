@@ -42,7 +42,7 @@ if sys.argv[1] == "--list":
     show_themes()
 else:
     if sys.argv[2]!="West" and sys.argv[2]!="North" and sys.argv[2]!="East" and sys.argv[2]!="South":
-        print("Panel position can be: North, South, West, South")
+        print("Panel position can be: North, South, West, East")
         exit()
                       
     if sys.argv[1] in mainthemes:       
