@@ -52,7 +52,7 @@ else:
             originaltheme= os.path.join(rootthemedir,"default")
         
         if len(sys.argv) > 2:
-            newthemepath = userthemedir+sys.argv[1]+"- "+sys.argv[2]+" Transparent"
+            newthemepath = userthemedir+sys.argv[1]+" - "+sys.argv[2]+" Transparent"
             copyanything(originaltheme,newthemepath)
             if sys.argv[1].startswith("breeze"):
                 os.remove(os.path.join(newthemepath,"metadata.desktop"))
@@ -63,7 +63,7 @@ else:
     elif sys.argv[1] in userthemes:
         print("user theme: "+sys.argv[1])
         if len(sys.argv) > 2:
-            newthemepath = userthemedir+sys.argv[1]+"- "+sys.argv[2]+" Transparent"
+            newthemepath = userthemedir+sys.argv[1]+" - "+sys.argv[2]+" Transparent"
             copyanything(userthemedir+sys.argv[1],newthemepath)        
             written=True
     else:
@@ -101,10 +101,14 @@ if written==True:
     fnew=open(fnewname,"w")
     
     usersEnabledShadows = []
+    usersDisabledShadows = []
     
     if(len(sys.argv)>=4):
-        for x in range(3, len(sys.argv)):            
-            usersEnabledShadows.append(sys.argv[x])
+        for x in range(3, len(sys.argv)):
+            if(sys.argv[x].startswith("-")):
+                usersDisabledShadows.append(sys.argv[x][1:])
+            else:
+                usersEnabledShadows.append(sys.argv[x])
 
     print("Disabled Shadows")
     for line in f:
@@ -150,28 +154,28 @@ if written==True:
                 newline= line[:-1]+' style="opacity:0"\n'
             
             
-            if 'id="shadow-topleft"' in line and (sys.argv[2] != "North" and sys.argv[2] != "West" and "topleft" not in usersEnabledShadows):
+            if 'id="shadow-topleft"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "West" and "topleft" not in usersEnabledShadows) or ("topleft" in usersDisabledShadows)):
                 print("topleft")
                 fnew.write(newline)
-            elif 'id="shadow-top"' in line and (sys.argv[2] != "North" and "top" not in usersEnabledShadows) :
+            elif 'id="shadow-top"' in line and ((sys.argv[2] != "North" and "top" not in usersEnabledShadows)or("top" in usersDisabledShadows)) :
                 print("top")
                 fnew.write(newline)
-            elif 'id="shadow-topright"' in line and (sys.argv[2] != "North" and sys.argv[2] != "East" and "topright" not in usersEnabledShadows):
+            elif 'id="shadow-topright"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "East" and "topright" not in usersEnabledShadows)or("topright" in usersDisabledShadows)):
                 print("topright")
                 fnew.write(newline)
-            elif 'id="shadow-right"' in line and (sys.argv[2] != "East" and "right" not in usersEnabledShadows):
+            elif 'id="shadow-right"' in line and ((sys.argv[2] != "East" and "right" not in usersEnabledShadows)or("right" in usersDisabledShadows)):
                 print("right")
                 fnew.write(newline)
-            elif 'id="shadow-bottomright"' in line and (sys.argv[2] != "East" and sys.argv[2] != "South" and "bottomright" not in usersEnabledShadows):
+            elif 'id="shadow-bottomright"' in line and ((sys.argv[2] != "East" and sys.argv[2] != "South" and "bottomright" not in usersEnabledShadows)or("bottomright" in usersDisabledShadows)):
                 print("bottomright")
                 fnew.write(newline)
-            elif 'id="shadow-bottom"' in line and (sys.argv[2] != "South" and "bottom" not in usersEnabledShadows):
+            elif 'id="shadow-bottom"' in line and ((sys.argv[2] != "South" and "bottom" not in usersEnabledShadows)or("bottom" in usersDisabledShadows)):
                 print("bottom")
                 fnew.write(newline)
-            elif 'id="shadow-bottomleft"' in line and (sys.argv[2] != "South" and sys.argv[2] != "West" and "bottomleft" not in usersEnabledShadows):
+            elif 'id="shadow-bottomleft"' in line and ((sys.argv[2] != "South" and sys.argv[2] != "West" and "bottomleft" not in usersEnabledShadows)or("bottomleft" in  usersDisabledShadows)):
                 print("bottomleft")
                 fnew.write(newline)
-            elif 'id="shadow-left"' in line and (sys.argv[2] != "West" and "left" not in usersEnabledShadows):
+            elif 'id="shadow-left"' in line and ((sys.argv[2] != "West" and "left" not in usersEnabledShadows)or("left" in usersDisabledShadows)):
                 print("left")
                 fnew.write(newline)
             else:
@@ -183,6 +187,8 @@ if written==True:
     
     call(["gzip",fname])
     os.rename(fname+".gz", os.path.join(newthemepath,"widgets/panel-background.svgz"))
+    
+    call(["kbuildsycoca5","--noincremental"])
     
 
 
