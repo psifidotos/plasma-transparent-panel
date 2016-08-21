@@ -131,6 +131,7 @@ if written==True:
     
     excludeLines=False
     inlineItems=0
+    bufferPreviousStr=""
     for line in f:
         if (line.startswith('</svg>')and(not containsThisPanel)):
              center = "south-center"
@@ -164,12 +165,18 @@ if written==True:
              fnew.write('  <rect x="0" y="0" height="10" width="10" style="opacity:0"/> </g>\n')
              fnew.write('  <g id="'+miniedge+'"  style="opacity:0">\n')
              fnew.write('  <rect x="0" y="0" height="10" width="10" style="opacity:0"/> </g>\n')
-             fnew.write(line)
+             fnew.write(line)            
         elif (searchStr in line):
              pos1 = line.index('"')
              pos2 = line.index('"',pos1+1)
              splitted = line[0:pos2+1]
-             fnew.write(splitted)
+             if( 'style="' in bufferPreviousStr):
+                        pos1=bufferPreviousStr.index('style="')
+                        pos2=bufferPreviousStr.index('"',pos1+7)
+                        remover = bufferPreviousStr[:pos1]+bufferPreviousStr[pos2+1:]
+                        bufferPreviousStr = remover
+             fnew.write(bufferPreviousStr + splitted)
+             bufferPreviousStr = ""
              if "</g>" not in line and "/>" not in line:
                  excludeLines=True
              else:
@@ -183,33 +190,52 @@ if written==True:
                 else:
                     newline= line[:-1]+' style="opacity:0"\n'
                 
-                
+                shadowIdLineFound=False
                 if 'id="shadow-topleft"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "West" and "topleft" not in usersEnabledShadows) or ("topleft" in usersDisabledShadows)):
                     print("topleft")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-top"' in line and ((sys.argv[2] != "North" and "top" not in usersEnabledShadows)or("top" in usersDisabledShadows)) :
                     print("top")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-topright"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "East" and "topright" not in usersEnabledShadows)or("topright" in usersDisabledShadows)):
                     print("topright")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-right"' in line and ((sys.argv[2] != "East" and "right" not in usersEnabledShadows)or("right" in usersDisabledShadows)):
                     print("right")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-bottomright"' in line and ((sys.argv[2] != "East" and sys.argv[2] != "South" and "bottomright" not in usersEnabledShadows)or("bottomright" in usersDisabledShadows)):
                     print("bottomright")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-bottom"' in line and ((sys.argv[2] != "South" and "bottom" not in usersEnabledShadows)or("bottom" in usersDisabledShadows)):
                     print("bottom")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-bottomleft"' in line and ((sys.argv[2] != "South" and sys.argv[2] != "West" and "bottomleft" not in usersEnabledShadows)or("bottomleft" in  usersDisabledShadows)):
                     print("bottomleft")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
                 elif 'id="shadow-left"' in line and ((sys.argv[2] != "West" and "left" not in usersEnabledShadows)or("left" in usersDisabledShadows)):
                     print("left")
-                    fnew.write(newline)
+                    shadowIdLineFound = True
+                    
+                if shadowIdLineFound:
+                    if( 'style="' in bufferPreviousStr):
+                        pos1=bufferPreviousStr.index('style="')
+                        pos2=bufferPreviousStr.index('"',pos1+7)
+                        remover = bufferPreviousStr[:pos1]+bufferPreviousStr[pos2+1:]
+                        bufferPreviousStr = remover
+                        
+                    fnew.write(bufferPreviousStr+newline)
+                    bufferPreviousStr=""
                 else:
-                    fnew.write(line)      
+                    bufferPreviousStr = bufferPreviousStr + line
+                        
+                if ">" in line and not shadowIdLineFound:
+                    fnew.write(bufferPreviousStr)
+                    bufferPreviousStr=""
+                #else:
+                 #   fnew.write(line)
+                 #   bufferPreviousStr=""
+                        #fnew.write(line)   
+                    
             elif excludeLines and "</g>" in line:
                 p1=line.index("</g>")
                 fnew.write(' style="opacity:0">\n')
