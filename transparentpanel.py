@@ -111,8 +111,27 @@ if written==True:
                 usersEnabledShadows.append(sys.argv[x])
 
     print("Disabled Shadows")
+    edge=""
+    if(sys.argv[2]=="North"):
+        edge="north"
+    elif(sys.argv[2]=="West"):
+        edge="west"
+    elif(sys.argv[2]=="East"):
+        edge="east"
+    elif(sys.argv[2]=="South"):
+        edge="south"
+    
+    searchStr='id="'+edge
+    containsThisPanel = False
     for line in f:
-        if line.startswith('</svg>'):
+        if searchStr in line:
+            containsThisPanel = True
+    f.close()
+    f=open(fname)
+    
+    excludeLines=False
+    for line in f:
+        if (line.startswith('</svg>')and(not containsThisPanel)):
              center = "south-center"
              edge = "south-top"
              minicenter = "south-mini-center"
@@ -145,48 +164,62 @@ if written==True:
              fnew.write('  <g id="'+miniedge+'"  style="opacity:0">\n')
              fnew.write('  <rect x="0" y="0" height="10" width="10" style="opacity:0"/> </g>\n')
              fnew.write(line)
+        elif (searchStr in line):
+             pos1 = line.index('"')
+             pos2 = line.index('"',pos1+1)
+             splitted = line[0:pos2]
+             fnew.write(splitted+'" style="opacity:0">\n')
+             fnew.write('  <rect x="0" y="0" height="10" width="10" style="opacity:0"/> </g>\n')
+             if '</g>' not in line:
+                 excludeLines=True                
         else:
-            newline=""
-            
-            if line.endswith(">\n"):
-                newline= line[:-2]+' style="opacity:0">\n'
-            else:
-                newline= line[:-1]+' style="opacity:0"\n'
-            
-            
-            if 'id="shadow-topleft"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "West" and "topleft" not in usersEnabledShadows) or ("topleft" in usersDisabledShadows)):
-                print("topleft")
-                fnew.write(newline)
-            elif 'id="shadow-top"' in line and ((sys.argv[2] != "North" and "top" not in usersEnabledShadows)or("top" in usersDisabledShadows)) :
-                print("top")
-                fnew.write(newline)
-            elif 'id="shadow-topright"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "East" and "topright" not in usersEnabledShadows)or("topright" in usersDisabledShadows)):
-                print("topright")
-                fnew.write(newline)
-            elif 'id="shadow-right"' in line and ((sys.argv[2] != "East" and "right" not in usersEnabledShadows)or("right" in usersDisabledShadows)):
-                print("right")
-                fnew.write(newline)
-            elif 'id="shadow-bottomright"' in line and ((sys.argv[2] != "East" and sys.argv[2] != "South" and "bottomright" not in usersEnabledShadows)or("bottomright" in usersDisabledShadows)):
-                print("bottomright")
-                fnew.write(newline)
-            elif 'id="shadow-bottom"' in line and ((sys.argv[2] != "South" and "bottom" not in usersEnabledShadows)or("bottom" in usersDisabledShadows)):
-                print("bottom")
-                fnew.write(newline)
-            elif 'id="shadow-bottomleft"' in line and ((sys.argv[2] != "South" and sys.argv[2] != "West" and "bottomleft" not in usersEnabledShadows)or("bottomleft" in  usersDisabledShadows)):
-                print("bottomleft")
-                fnew.write(newline)
-            elif 'id="shadow-left"' in line and ((sys.argv[2] != "West" and "left" not in usersEnabledShadows)or("left" in usersDisabledShadows)):
-                print("left")
-                fnew.write(newline)
-            else:
-                fnew.write(line)
+            if(not excludeLines)and('</g>' not in line):
+                newline=""
+                
+                if line.endswith(">\n"):
+                    newline= line[:-2]+' style="opacity:0">\n'
+                else:
+                    newline= line[:-1]+' style="opacity:0"\n'
+                
+                
+                if 'id="shadow-topleft"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "West" and "topleft" not in usersEnabledShadows) or ("topleft" in usersDisabledShadows)):
+                    print("topleft")
+                    fnew.write(newline)
+                elif 'id="shadow-top"' in line and ((sys.argv[2] != "North" and "top" not in usersEnabledShadows)or("top" in usersDisabledShadows)) :
+                    print("top")
+                    fnew.write(newline)
+                elif 'id="shadow-topright"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "East" and "topright" not in usersEnabledShadows)or("topright" in usersDisabledShadows)):
+                    print("topright")
+                    fnew.write(newline)
+                elif 'id="shadow-right"' in line and ((sys.argv[2] != "East" and "right" not in usersEnabledShadows)or("right" in usersDisabledShadows)):
+                    print("right")
+                    fnew.write(newline)
+                elif 'id="shadow-bottomright"' in line and ((sys.argv[2] != "East" and sys.argv[2] != "South" and "bottomright" not in usersEnabledShadows)or("bottomright" in usersDisabledShadows)):
+                    print("bottomright")
+                    fnew.write(newline)
+                elif 'id="shadow-bottom"' in line and ((sys.argv[2] != "South" and "bottom" not in usersEnabledShadows)or("bottom" in usersDisabledShadows)):
+                    print("bottom")
+                    fnew.write(newline)
+                elif 'id="shadow-bottomleft"' in line and ((sys.argv[2] != "South" and sys.argv[2] != "West" and "bottomleft" not in usersEnabledShadows)or("bottomleft" in  usersDisabledShadows)):
+                    print("bottomleft")
+                    fnew.write(newline)
+                elif 'id="shadow-left"' in line and ((sys.argv[2] != "West" and "left" not in usersEnabledShadows)or("left" in usersDisabledShadows)):
+                    print("left")
+                    fnew.write(newline)
+                else:
+                    fnew.write(line)
+            elif excludeLines and '</g>' in line:
+                p1=line.index('</g>')
+                fnew.write(line[p1+4:])
+                excludeLines=False
+                
     f.close()
     fnew.close()
     os.remove(fname)
     os.rename(fnewname, fname)
-    
-    call(["gzip",fname])
-    os.rename(fname+".gz", os.path.join(newthemepath,"widgets/panel-background.svgz"))
+    os.system("gzip -S z "+fname.replace(" ","\ "))
+    #call(["gzip",fname])
+    #os.rename(fname+".gz", os.path.join(newthemepath,"widgets/panel-background.svgz"))
     
     call(["kbuildsycoca5","--noincremental"])
     
