@@ -20,7 +20,7 @@ class MainWindow(QtGui.QWidget):
         self.colActive = QtGui.QColor(30, 146, 255)       
         self.colInactive = QtGui.QColor(150, 150, 150)       
         
-        panelsy = 120
+        panelsy = 100
         buttonsx = 75
         
         self.themeCmb = QtGui.QComboBox(self)               
@@ -41,11 +41,11 @@ class MainWindow(QtGui.QWidget):
                              
         # Panels visuals
         self.northSquare = QtGui.QFrame(self)
-        self.northSquare.setGeometry(buttonsx+90, panelsy+30, 220, 50)
+        self.northSquare.setGeometry(buttonsx+90, panelsy+30, 200, 30)
         self.northSquare.setStyleSheet("QWidget { background-color: %s }" % self.colInactive.name())
         
         self.westSquare = QtGui.QFrame(self)
-        self.westSquare.setGeometry(self.northSquare.x()-50, self.northSquare.y()+self.northSquare.height()+10, 50, 150)
+        self.westSquare.setGeometry(self.northSquare.x()-30, self.northSquare.y()+self.northSquare.height()+10, 30, 120)
         self.westSquare.setStyleSheet("QWidget { background-color: %s }" % self.colInactive.name())
         
         self.eastSquare = QtGui.QFrame(self)
@@ -81,16 +81,15 @@ class MainWindow(QtGui.QWidget):
         #Shadows visuals
         shadowslbl = QtGui.QLabel("3. Shadows",self)
         shadowslbl.setFont(font)
-        shadowslbl.move(10,self.southSquare.y()+self.southSquare.height()+30) 
-
+        shadowslbl.move(10,self.southSquare.y()+self.southSquare.height()+5) 
         
-        shMargin = 20
+        shMargin = 15
         
         self.topleftShadow = QtGui.QLabel(self)
         self.pixmap = QtGui.QPixmap("images/shadow-topleft.png")
         self.topleftShadow.setScaledContents(True)
         self.topleftShadow.setPixmap(self.pixmap)
-        self.topleftShadow.setGeometry(self.southSquare.x(),self.southSquare.y()+self.southSquare.height()+100,shMargin,shMargin)
+        self.topleftShadow.setGeometry(self.southSquare.x()+2,self.southSquare.y()+self.southSquare.height()+60,shMargin,shMargin)
         
         self.topShadow = QtGui.QLabel(self)
         self.pixmap = QtGui.QPixmap("images/shadow-top.png")
@@ -179,25 +178,25 @@ class MainWindow(QtGui.QWidget):
         self.southClicked(True)
         self.southb.clearFocus()
         
-        self.setGeometry(300, 300, 550, 880)
+        self.setGeometry(300, 300, 550, 670)
 
         separator1 = QtGui.QFrame(self)
-        separator1.setGeometry(self.width()/2-110, self.northb.y()-30, 220, 1)
+        separator1.setGeometry(self.northb.x()-20, self.northb.y()-20, 220, 1)
         separator1.setStyleSheet("QWidget { background-color: black }")
 
         separator2 = QtGui.QFrame(self)
-        separator2.setGeometry(self.width()/2-110, self.topb.y()-50, 220, 1)
+        separator2.setGeometry(self.northb.x()-20, self.topb.y()-20, 220, 1)
         separator2.setStyleSheet("QWidget { background-color: black }")
 
         self.themeCmb.setGeometry(self.width()/2 - 150 ,chooseThemelbl.y()+15,300,30);
 
         #####generate button
         bottomspace = QtGui.QFrame(self)
-        bottomspace.setGeometry(0, self.height()-50, self.width(), 50)
+        bottomspace.setGeometry(0, self.height()-40, self.width(), 40)
         bottomspace.setStyleSheet("QWidget { background-color: #4b4b4b }")
         
         self.generateb = QtGui.QPushButton('Generate New Theme', self)
-        self.generateb.move(self.width()-90-self.generateb.width(), self.height()-10-self.generateb.height())    
+        self.generateb.move(self.width()-90-self.generateb.width(), self.height()-6-self.generateb.height())    
         
         self.deleteb.move(self.themeCmb.x()+self.themeCmb.width()+20,self.themeCmb.y())
         self.themeCmb.currentIndexChanged.connect(self.themeCurrentIndexChanged)
