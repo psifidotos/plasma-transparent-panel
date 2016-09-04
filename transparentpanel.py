@@ -184,11 +184,13 @@ if written==True:
         else:
             if not excludeLines:
                 newline=""
+                endLine=False
                 
                 if line.endswith(">\n"):
                     newline= line[:-2]+' style="opacity:0">\n'
                 else:
                     newline= line[:-1]+' style="opacity:0"\n'
+                    endLine=True
                 
                 shadowIdLineFound=False
                 if 'id="shadow-topleft"' in line and ((sys.argv[2] != "North" and sys.argv[2] != "West" and "topleft" not in usersEnabledShadows) or ("topleft" in usersDisabledShadows)):
@@ -222,8 +224,13 @@ if written==True:
                         pos2=bufferPreviousStr.index('"',pos1+7)
                         remover = bufferPreviousStr[:pos1]+bufferPreviousStr[pos2+1:]
                         bufferPreviousStr = remover
+                    
+                    if endLine == False:
+                        fnew.write(bufferPreviousStr+newline)
+                    else:
+                        fnew.write(bufferPreviousStr)
+                        excludeLines = True
                         
-                    fnew.write(bufferPreviousStr+newline)
                     bufferPreviousStr=""
                 else:
                     bufferPreviousStr = bufferPreviousStr + line
