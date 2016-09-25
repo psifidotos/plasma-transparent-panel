@@ -406,27 +406,27 @@ class MainWindow(QtWidgets.QWidget):
 
 
     def askThemeCreation(self):
-        msg = QtGui.QMessageBox()
-        msg.setIcon(QtGui.QMessageBox.Warning)
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Warning)
 
         newtheme=self.themeCmb.currentText()+' - '+self.panel+' Transparent'
         msg.setText("Would you like to create theme <b>"+newtheme+"</b> ?")
         msg.setWindowTitle("Create Theme Confirmation")
-        msg.setStandardButtons(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
         retval = msg.exec_()
 
-        if retval == QtGui.QMessageBox.Yes:
+        if retval == QtWidgets.QMessageBox.Yes:
             command = 'python transparentpanel.py "'+self.themeCmb.currentText()+'" '+self.panel
             for shad in self.shadows:
                 command = command + " " +shad
             os.system(str(command))
             self.updateThemeCmb(newtheme)
-            msg2 = QtGui.QMessageBox()
-            msg2.setIcon(QtGui.QMessageBox.Information)
+            msg2 = QtWidgets.QMessageBox()
+            msg2.setIcon(QtWidgets.QMessageBox.Information)
             msg2.setText("Your new theme was created and you can activate it through Plasma System Settings")
             msg2.setWindowTitle("New Theme Created")
-            msg2.setStandardButtons(QtGui.QMessageBox.Ok)
+            msg2.setStandardButtons(QtWidgets.QMessageBox.Ok)
             retval2 = msg2.exec_()
 
 
@@ -452,16 +452,16 @@ class MainWindow(QtWidgets.QWidget):
 
 
     def deleteThemeBtnClicked(self, pressed):
-        msg = QtGui.QMessageBox()
-        msg.setIcon(QtGui.QMessageBox.Warning)
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Warning)
 
         msg.setText("Would you like to delete theme <b>"+self.themeCmb.currentText()+"</b> ?")
         msg.setWindowTitle("Delete Theme Confirmation")
-        msg.setStandardButtons(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
         retval = msg.exec_()
 
-        if retval == QtGui.QMessageBox.Yes:
+        if retval == QtWidgets.QMessageBox.Yes:
             themepath = os.path.join(os.getenv("HOME"),".local/share/plasma/desktoptheme/")
             themepath = os.path.join(themepath, str(self.themeCmb.currentText()) )
             if os.path.isdir(themepath):
