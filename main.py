@@ -1,3 +1,5 @@
+#! /usr/bin/env python2
+
 import sys, os, shutil
 from PyQt4 import QtGui
 from subprocess import call

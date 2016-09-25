@@ -1,3 +1,5 @@
+#! /usr/bin/env python2
+
 import os, sys
 import shutil, errno
 from subprocess import call
