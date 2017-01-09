@@ -96,9 +96,13 @@ if written==True:
 
     
     fname = os.path.join(newthemepath,"widgets/panel-background.svgz")
-    os.rename(fname, os.path.join(newthemepath,"widgets/panel-background.svg.gz"))
-    fname = os.path.join(newthemepath,"widgets/panel-background.svg.gz")
-    call(["gunzip",fname])
+    try:
+        os.rename(fname, os.path.join(newthemepath,"widgets/panel-background.svg.gz"))
+    except FileNotFoundError:
+        print("panel-background.svgz not found")
+    else:
+        fname = os.path.join(newthemepath,"widgets/panel-background.svg.gz")
+        call(["gunzip",fname])
     
     fnewname = os.path.join(newthemepath,"widgets/panel-background-new.svg")
     fname = os.path.join(newthemepath,"widgets/panel-background.svg")
